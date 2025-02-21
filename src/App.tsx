@@ -3,10 +3,10 @@ import HostList from "./components/HostList";
 
 function App() {
   return (
-    <>
-      <h1>Censys Take Home Test | Sam Aran</h1>
+    <main>
+      <h1>Discovered Hosts</h1>
       <HostList />
-    </>
+    </main>
   );
 }
 
