@@ -1,5 +1,4 @@
 type Host = {
-  id: number;
   ip: string;
   services: Array<Service>;
 };

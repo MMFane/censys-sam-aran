@@ -1,64 +1,37 @@
+import axios from "axios";
 import { Host } from "../types/types";
 
-const fetchHosts = () => {
-  const fakeData: Array<Host> = [
-    {
-      id: 1,
-      ip: "1.2.3.4.5",
-      services: [
-        {
-          extended_service_name: "HTTP",
-          port: 123,
+const fetchHosts = async () => {
+  try {
+    const username = process.env.API_ID;
+    const password = process.env.API_PASSWORD;
+    if (!username || !password) {
+      throw new Error("API username and password are missing");
+    }
+    const res = await axios.get(
+      `https://search.censys.io/api/v2/hosts/search?per_page=50&virtual_hosts=INCLUDE`,
+      {
+        auth: {
+          username,
+          password,
         },
-        {
-          extended_service_name: "HTTP",
-          port: 456,
-        },
-        {
-          extended_service_name: "HTTPS",
-          port: 789,
-        },
-      ],
-    },
-    {
-      id: 2,
-      ip: "6.7.8.9.0",
-      services: [
-        {
-          extended_service_name: "HTTP",
-          port: 123,
-        },
-        {
-          extended_service_name: "HTTP",
-          port: 456,
-        },
-        {
-          extended_service_name: "HTTPS",
-          port: 789,
-        },
-      ],
-    },
-    {
-      id: 3,
-      ip: "99.8.7.6.5",
-      services: [
-        {
-          extended_service_name: "HTTP",
-          port: 123,
-        },
-        {
-          extended_service_name: "HTTP",
-          port: 456,
-        },
-        {
-          extended_service_name: "HTTPS",
-          port: 789,
-        },
-      ],
-    },
-  ];
+      }
+    );
+    // temporary eslint disable to get things moving - if time will go back and implement censys/censys-typescript package to get types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formatted: Array<Host> = res.data.result.hits.map((host: any) => {
+      return {
+        ip: host.ip,
+        services: host.services,
+      };
+    });
+    console.log(formatted);
+    return formatted;
+  } catch (error) {
+    console.error("Error fetching hosts:", error);
 
-  return fakeData;
+    throw error;
+  }
 };
 
 export { fetchHosts };

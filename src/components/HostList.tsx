@@ -9,7 +9,7 @@ function HostList() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = fetchHosts();
+        const data = await fetchHosts();
         setHosts(data);
       } catch (error) {
         console.error("Error fetching hosts:", error);
@@ -24,7 +24,7 @@ function HostList() {
       <h2>Host List</h2>
       <ul>
         {hosts.map((host: Host) => (
-          <HostCard key={host.id} host={host} />
+          <HostCard key={host.ip} host={host} />
         ))}
       </ul>
     </>
