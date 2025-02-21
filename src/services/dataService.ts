@@ -2,7 +2,10 @@ import axios from "axios";
 import { Host, PaginatedHosts } from "../types/types";
 
 const dataService = {
-  fetchHosts: async (cursor?: string): Promise<PaginatedHosts> => {
+  fetchHosts: async (
+    cursor?: string,
+    query?: string
+  ): Promise<PaginatedHosts> => {
     try {
       const username = process.env.API_ID;
       const password = process.env.API_PASSWORD;
@@ -10,7 +13,9 @@ const dataService = {
         throw new Error("API username and password are missing");
       }
       const res = await axios.get(
-        `https://search.censys.io/api/v2/hosts/search?per_page=5&virtual_hosts=INCLUDE${ cursor ? `&cursor=${cursor}` : ''}`,
+        `https://search.censys.io/api/v2/hosts/search?${
+          query ? `q=${query}&` : ""
+        }per_page=5&virtual_hosts=INCLUDE${cursor ? `&cursor=${cursor}` : ""}`,
         {
           auth: {
             username,
@@ -27,7 +32,7 @@ const dataService = {
         };
       });
       const next = res.data.result.links.next;
-      return {hosts, next: next};
+      return { hosts, next: next };
     } catch (error) {
       console.error("Error fetching hosts:", error);
 
