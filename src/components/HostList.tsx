@@ -5,18 +5,21 @@ import HostCard from "./HostCard";
 
 function HostList() {
   const [hosts, setHosts] = useState<Array<Host>>([]);
+  const [cursor, setCursor] = useState("");
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await dataService.fetchHosts();
-        setHosts(data);
+  const fetchHosts = async () => {
+    try {
+        const data = await dataService.fetchHosts(cursor);
+        setHosts((prevHosts) => [...prevHosts, ...data.hosts]);
+        setCursor(data.next);
       } catch (error) {
         console.error("Error fetching hosts:", error);
         throw error;
       }
-    }
-    fetchData();
+  }
+
+  useEffect(() => {
+    fetchHosts();
   }, []);
 
   return (
@@ -27,6 +30,13 @@ function HostList() {
           <HostCard key={host.ip} host={host} />
         ))}
       </ul>
+      <button
+        onClick={async () => {
+          fetchHosts()
+        }}
+      >
+        Load More
+      </button>
     </>
   );
 }

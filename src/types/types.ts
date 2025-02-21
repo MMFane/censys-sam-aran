@@ -8,4 +8,9 @@ type Service = {
   port: number;
 };
 
-export type { Host, Service };
+type PaginatedHosts = {
+  hosts: Array<Host>;
+  next: string;
+};
+
+export type { Host, PaginatedHosts, Service };
