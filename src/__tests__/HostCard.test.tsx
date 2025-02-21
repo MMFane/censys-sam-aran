@@ -7,5 +7,7 @@ describe("HostCard", () => {
   test("HostCard renders expected data", () => {
     render(<HostCard host={hosts[0]} />);
     expect(screen.getByText("1.2.3.4.5"));
+    expect(screen.getByText("HTTP: 2"))
+    expect(screen.getByText("HTTPS: 1"))
   });
 });

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchHosts } from "../services/dataService";
+import { dataService } from "../services/dataService";
 import { Host } from "../types/types";
 import HostCard from "./HostCard";
 
@@ -9,7 +9,7 @@ function HostList() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await fetchHosts();
+        const data = await dataService.fetchHosts();
         setHosts(data);
       } catch (error) {
         console.error("Error fetching hosts:", error);
