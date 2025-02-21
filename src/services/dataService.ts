@@ -23,7 +23,8 @@ const dataService = {
           },
         }
       );
-      // temporary eslint disable to get things moving - if time will go back and implement censys/censys-typescript package to get types
+      // To be improved: rather than this bandaind eslint disable, if I had more time, I'd grab the real types from the censys/censys-typescript.
+      // I could also use the client in this package rather than an axios call
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const hosts: Array<Host> = res.data.result.hits.map((host: any) => {
         return {

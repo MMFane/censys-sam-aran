@@ -30,6 +30,10 @@ function HostList() {
     }
   };
 
+  // To be improved - manage dependencies so that we are able to satisfy this linting issue without triggering infinite rerenders
+  // If we add fetchHosts to the dependecy array here, that shifts the problem to fetchHosts(), which then needs to be wrapped in useCallback()
+  // and will then require isLoading and hasMore in its dependency array, which also currently triggers the same issue 
+  // I felt it was cleaner to leave it here for now
   useEffect(() => {
     fetchHosts(cursor, query);
   }, [cursor, query]);
