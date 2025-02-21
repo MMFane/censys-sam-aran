@@ -55,4 +55,9 @@ const hosts = [
   },
 ];
 
-export { hosts };
+const paginatedHosts = {
+  hosts,
+  next: "abc123"
+}
+
+export { hosts, paginatedHosts };
