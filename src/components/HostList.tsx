@@ -6,17 +6,26 @@ import HostCard from "./HostCard";
 function HostList() {
   const [hosts, setHosts] = useState<Array<Host>>([]);
   const [cursor, setCursor] = useState("");
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchHosts = async () => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+
     try {
-        const data = await dataService.fetchHosts(cursor);
-        setHosts((prevHosts) => [...prevHosts, ...data.hosts]);
-        setCursor(data.next);
-      } catch (error) {
-        console.error("Error fetching hosts:", error);
-        throw error;
-      }
-  }
+      const data = await dataService.fetchHosts(cursor);
+      setHosts((prevHosts) => [...prevHosts, ...data.hosts]);
+      setCursor(data.next);
+      setHasMore(data.next !== null);
+    } catch (error) {
+      console.error("Error fetching hosts:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchHosts();
@@ -30,13 +39,16 @@ function HostList() {
           <HostCard key={host.ip} host={host} />
         ))}
       </ul>
-      <button
-        onClick={async () => {
-          fetchHosts()
-        }}
-      >
-        Load More
-      </button>
+      {isLoading && <p>Loading...</p>}
+      {hasMore && (
+        <button
+          onClick={async () => {
+            fetchHosts();
+          }}
+        >
+           Load More
+        </button>
+      )}
     </>
   );
 }
