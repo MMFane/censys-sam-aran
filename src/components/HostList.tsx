@@ -42,7 +42,7 @@ function HostList() {
     <>
       <h2>Host List</h2>
       <div>
-        <label htmlFor="query">Filter Hosts</label>
+        <label htmlFor="query" style={{"marginRight": "1rem"}}>Filter Hosts</label>
         <input
           name="query"
           id="query"
@@ -54,13 +54,14 @@ function HostList() {
           }, 300)}
         />
       </div>
+      {!isLoading && hosts.length == 0 && <p>No hosts match this query</p>}
       <ul>
         {hosts.map((host: Host) => (
           <HostCard key={host.ip} host={host} />
         ))}
       </ul>
       {isLoading && <p>Loading...</p>}
-      {hasMore && (
+      {hasMore && hosts.length != 0 && (
         <button
           onClick={async () => {
             setCursor(nextCursor);

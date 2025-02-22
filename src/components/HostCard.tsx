@@ -23,7 +23,7 @@ function HostCard({ host }: HostProps) {
   return (
     <>
       <li>
-        <p>{host.ip}</p>
+        <p style={{"fontWeight": "bold", "marginBottom": 0}}>{host.ip}</p>
         <ul>
           {aggregatedServiceNames &&
             Object.entries(aggregatedServiceNames).map((entry) => {
